@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('cover');
             $table->unsignedBigInteger('bookshelf_id');
-            $table->unsignedBigInteger('category_id');
+            // $table->unsignedBigInteger('category_id');
             $table->timestamps();
 
             $table->foreign('bookshelf_id')
@@ -28,10 +28,10 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
                 
-            $table->foreign('category_id')
-                ->references('id')->on('categories')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            // $table->foreign('category_id')
+            //     ->references('id')->on('categories')
+            //     ->onUpdate('cascade')
+            //     ->onDelete('cascade');
         });
     }
 
