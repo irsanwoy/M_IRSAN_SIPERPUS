@@ -12,6 +12,8 @@ class Book extends Model
         'author',
         'year',
         'publiser',
+        'city',
+        'cover',
         'bookshelf_id',
     ];
 

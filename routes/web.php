@@ -1,35 +1,49 @@
 <?php
 
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
+namespace App\Http\Controllers;
 
+use App\Models\Book;
+use App\Models\Bookshelf; 
+use Illuminate\Http\Request;
 
+class BookController extends Controller
+{
+    public function index()
+    {
+        $data['books'] = Book::all();
+        return view('books.index', $data);
+    }
 
-Route::get('/', function () {
-    return view('welcome');
-});
+    public function create()
+    {
+        $data['bookshelves'] = Bookshelf::pluck('name', 'id'); 
+        return view('books.create', $data);
+    }
 
-// Route::get('/buku', function () {
-//     $data['buku'] = [
-//         ['judul' => 'buku a', 'halaman' => 12913],
-//         ['judul' => 'buku b', 'halaman' => 11233],
-//         ['judul' => 'buku c', 'halaman' => 156743],
-//         ['judul' => 'buku d', 'halaman' => 122349],
-//     ];
-//     return view('buku.index', $data);
-// });
+    public function store(Request $request)
+    {
+        $request['category_id'] = 1; 
+        Book::create($request->all());
+        return redirect()->route('book.index'); 
+    }
 
+    public function edit($id)
+    {
+        $book = Book::findOrFail($id);
+        return view('books.edit', compact('book'));
+    }
 
+    public function update(Request $request, $id)
+    {
+        $book = Book::findOrFail($id);
+        $book->update($request->all());
+        return redirect()->route('book.index'); 
+    }
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-require __DIR__.'/auth.php';
+    public function destroy($id)
+    {
+        $book = Book::findOrFail($id);
+        $book->delete();
+        return redirect()->route('book.index'); 
+    }
+}
